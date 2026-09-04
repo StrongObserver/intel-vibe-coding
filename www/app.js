@@ -25,14 +25,14 @@ async function init() {
   const [st, meta] = await Promise.all([api('/api/state'), api('/api/meta')]);
   S.project = st.body.project; S.meta = meta.body;
   Object.keys(S.meta.dimensions).forEach(k => LABEL[k] = S.meta.dimensions[k].label);
-  refreshConflicts();
+  await refreshConflicts();   // 必须先等分析就绪，否则 renderAll 会在 S.analysis=null 处中断
   renderAll();
   bindNav();
 }
 
 async function refreshConflicts() {
   const c = await api('/api/conflicts');
-  S.analysis = c.body;
+  S.analysis = (c.ok && c.body) ? c.body : { conflicts: [], uncertainties: [] };
 }
 
 async function saveState(next) {
@@ -185,7 +185,8 @@ function severityCls(s) { return s === 'high' ? 'high' : (s === 'medium' ? 'medi
 
 function renderAnalysis() {
   const cf = $('#conflicts'); cf.innerHTML = '';
-  (S.analysis.conflicts || []).forEach(c => {
+  const out = S.analysis || { conflicts: [], uncertainties: [] };
+  (out.conflicts || []).forEach(c => {
     const d = document.createElement('div');
     d.className = 'conf ' + severityCls(c.severity);
     d.innerHTML = '<div style="min-width:200px"><span class="tag">' +
@@ -195,7 +196,7 @@ function renderAnalysis() {
     cf.appendChild(d);
   });
   const uc = $('#uncertainties'); uc.innerHTML = '';
-  (S.analysis.uncertainties || []).forEach(u => {
+  (out.uncertainties || []).forEach(u => {
     const d = document.createElement('div'); d.className = 'unc';
     d.innerHTML = '<span class="q"><b>☐ ' + u.question + '</b><div class="d muted">' +
       u.detail + '</div></span><span class="owner">' + u.owner + '</span>' +
