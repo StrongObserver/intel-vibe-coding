@@ -1,0 +1,15 @@
+# ---- Python 运行产物 ----
+__pycache__/
+*.py[cod]
+
+# ---- 本地状态(仅在 --save 模式下产生) ----
+state.json
+
+# ---- 云端开发回退快照(不上传) ----
+_bak/
+
+# ---- 系统/编辑器杂项 ----
+.DS_Store
+*.log
+.idea/
+.vscode/

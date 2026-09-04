@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>周末两天一夜 · 六人旅行决策工作台</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="app">
+  <h1>🧭 六人 · 两天一夜 · 周末旅行决策工作台</h1>
+  <div class="sub">把混乱群聊，收敛成一份能拍板、能执行、能发回群里的方案</div>
+</header>
+
+<div class="wrap">
+  <nav class="steps" id="nav"></nav>
+  <div class="bar">
+    <button class="btn primary" id="saveBtn" disabled>保存修改</button>
+    <button class="btn ghost" id="resetBtn">恢复群聊种子</button>
+    <span class="muted">改动先保存，再重新生成方案</span>
+  </div>
+
+  <!-- 第 1 步：需求共识 -->
+  <section class="step" id="step1">
+    <div class="panel">
+      <h2 class="sec">📅 行程设置</h2>
+      <div class="hint">日期默认取下周末（可改）；出发地假设上海。</div>
+      <div class="kv">
+        <label>出发：<input type="date" id="dateStart"></label>
+        <label>返回：<input type="date" id="dateEnd"></label>
+        <span class="tag">过夜 1 晚</span>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="sec">👥 六人需求（点击硬/软可切换，数值可改）</h2>
+      <div class="hint">判断依据来自群聊原文措辞："必须/最快…才能" = 硬约束；"最好/不想/比较想" = 偏好。每条都能追溯原话。</div>
+      <div id="reqs"></div>
+    </div>
+    <div class="panel">
+      <h2 class="sec">🗺️ 候选城市知识库（内置估算数据，可扩展）</h2>
+      <div id="kb"></div>
+      <p class="hint">打分依据就是这里的数据；对数字存疑可认为"估算口径"，用于横向比较而非绝对精确。</p>
+    </div>
+  </section>
+
+  <!-- 第 2 步：冲突雷达 -->
+  <section class="step" id="step2" style="display:none">
+    <div class="panel">
+      <h2 class="sec">⚠️ 冲突雷达</h2>
+      <div class="hint">这些是需求之间的必然拉扯，不是错——先看见，才能谈。</div>
+      <div id="conflicts"></div>
+    </div>
+    <div class="panel">
+      <h2 class="sec">❓ 待确认清单（谁 · 何时）</h2>
+      <div class="hint">天气、车票、日期、预算口径…… 决定下之前都还悬着。</div>
+      <div id="uncertainties"></div>
+    </div>
+  </section>
+
+  <!-- 第 3 步：候选方案 -->
+  <section class="step" id="step3" style="display:none">
+    <div class="panel">
+      <h2 class="sec">🎲 生成候选方案</h2>
+      <div class="bar">
+        <div class="seg" id="weatherSeg">
+          <button data-w="sunny" class="on">☀️ 晴天/一般</button>
+          <button data-w="rain">🌧️ 雨天预案</button>
+        </div>
+        <button class="btn primary" id="genBtn">生成候选方案</button>
+      </div>
+      <div class="hint">每个候选都已通过所有硬约束（返程截止、出发时间、素食、座位、步行/预算若为硬性）；分数表示对软偏好的覆盖度。点击卡片查看细节并选定。</div>
+      <div class="plan-grid" id="plans"></div>
+      <div id="detail"></div>
+    </div>
+  </section>
+
+  <!-- 第 4 步：决策与导出 -->
+  <section class="step" id="step4" style="display:none">
+    <div id="decide"></div>
+  </section>
+
+  <div class="footer-note">本工具在本地运行，数据不出浏览器/本机 · 由 AI Coding 工具生成演示</div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
